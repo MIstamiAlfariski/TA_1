@@ -36,39 +36,50 @@ print("[INFO] System Ready!")
 
 # --- 2. FUNGSI UTAMA (Dipanggil oleh app.py) ---
 def get_response(msg):
-    """
-    Fungsi ini menerima teks string dari user, 
-    dan mengembalikan teks string jawaban bot.
-    """
     try:
-        # A. Preprocessing (Harus SAMA PERSIS dengan saat Training)
-        # 1. Lowercase & Hapus Punctuation
+        # A. Preprocessing
         msg_processed = [letters.lower() for letters in msg if letters not in string.punctuation]
         msg_processed = ''.join(msg_processed)
         
-        # 2. Tokenizing (Ubah ke Angka)
-        # texts_to_sequences mengharapkan list of text, jadi bungkus [msg]
         seq = tokenizer.texts_to_sequences([msg_processed])
         
-        # 3. Padding (Samakan Panjang)
+        # Cek apakah kata dikenali (PENTING)
+        if not seq or not seq[0]:
+             print(f"[DEBUG] Input '{msg}' tidak dikenali sama sekali oleh Tokenizer.")
+             return "Maaf, saya tidak mengerti kata-kata tersebut."
+
         padded = pad_sequences(seq, maxlen=input_shape)
 
-        # B. Prediksi
-        prediction = model.predict(padded, verbose=0) # verbose=0 agar tidak nyampah di terminal
-        prediction_idx = prediction.argmax()
+        # B. Prediksi Model
+        prediction = model.predict(padded, verbose=0)
         
-        # C. Ambil Tag Hasil Prediksi
-        tag = le.inverse_transform([prediction_idx])[0]
+        # --- LOGIKA THRESHOLD ---
+        results = prediction[0]
+        prediction_idx = np.argmax(results)
+        confidence_score = results[prediction_idx]
         
-        # D. Ambil Jawaban Acak
-        if tag in responses:
-            return random.choice(responses[tag])
-        else:
-            return "Maaf, saya belum mengerti pertanyaan tersebut."
-            
+        tag_prediksi = le.inverse_transform([prediction_idx])[0]
+
+        # --- TAMPILKAN DI TERMINAL (Hanya untuk Developer) ---
+        print(f"\n[DEBUG SISTEM]")
+        print(f"Pesan User     : {msg}")
+        print(f"Tebakan Bot    : {tag_prediksi}")
+        print(f"Tingkat Yakin  : {confidence_score:.4f} (atau {confidence_score*100:.2f}%)")
+        print(f"------------------------------------------------")
+
+        # Set Threshold agak tinggi (Coba 0.7 atau 70%)
+        ERROR_THRESHOLD = 0.50 
+
+        if confidence_score > ERROR_THRESHOLD:
+            if tag_prediksi in responses:
+                return random.choice(responses[tag_prediksi])
+        
+        # Jika keyakinan di bawah 70%, tolak menjawab
+        return "Maaf, pertanyaan tersebut di luar konteks Fara'idh. Silakan tanya seputar waris."
+
     except Exception as e:
         print(f"[ERROR] {e}")
-        return "Terjadi kesalahan pada sistem."
+        return "Terjadi kesalahan sistem."
 
 if __name__ == "__main__":
     print("Cek Bot: ", get_response("Halo"))
