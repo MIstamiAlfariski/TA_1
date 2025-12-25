@@ -1,6 +1,6 @@
 # 🤖 Chatbot Fara'idh - Asisten Hukum Waris Islam
 
-Aplikasi chatbot berbasis web cerdas yang dirancang untuk membantu pengguna memahami dan berkonsultasi mengenai hukum waris Islam (Fara'idh). Sistem ini menggunakan model *Deep Learning* **Bi-Directional LSTM (Bi-LSTM)** untuk memahami konteks pertanyaan pengguna dengan akurasi tinggi.
+Aplikasi chatbot berbasis web cerdas yang dirancang untuk membantu pengguna memahami dan berkonsultasi mengenai hukum waris Islam (Fara'idh). Sistem ini menggunakan model *Machine Learning* **Bi-Directional LSTM (Bi-LSTM)** untuk memahami konteks pertanyaan pengguna dengan akurasi tinggi.
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-Keras-orange)
