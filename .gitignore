@@ -1,5 +1,5 @@
 node_modules/
-venv/
+vnev/
 __pycache__/
 .vscode/
 *.pyc
