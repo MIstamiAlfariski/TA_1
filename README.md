@@ -33,6 +33,9 @@ Unduh kode sumber ke komputer Anda:
 git clone [https://github.com/MIstamiAlfariski/TA_1.git](https://github.com/MIstamiAlfariski/TA_1.git)
 cd TA_1
 
+# Instal Tailwindcss v3
+npm install -D tailwindcss@3
+
 # Untuk Windows
 python -m venv venv
 venv\Scripts\activate
